@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
+
 <head>
 	<meta charset="UTF-8">
 	<title>helloword</title>
@@ -7,7 +8,7 @@
 		Vue.config.devtools = true;
 	</script>
 	<style>
-		.split_line{
+		.split_line {
 			border-bottom: 1px solid #e2e2e2;
 			margin: 10px;
 			padding-bottom: 5px;
@@ -16,58 +17,67 @@
 		}
 	</style>
 </head>
+
 <body>
 	<div id="app">
 		<p class="split_line">{{ }}</p>
-<p>{{message}}</p>
-	<p class="split_line">v-if</p>
-	<span v-bind:title="message" v-if="seen">
-	鼠标悬停查看时间,
-	</span >
-	<p class="split_line">v-for</p>
-	<ul class="todolist">
-		<li v-for="todo in todoList">
-			{{todo.title}}
-		</li>
-	</ul>
+		<p>{{message}}</p>
+		<p class="split_line">v-if</p>
+		<span v-bind:title="message" v-if="seen">
+			鼠标悬停查看时间,
+		</span>
+		<p class="split_line">v-for</p>
+		<ul class="todolist">
+			<li v-for="todo in todoList">
+				{{todo.title}}
+			</li>
+		</ul>
 		<p class="split_line">v-on:click</p>
 		<button v-on:click="reverMessage">
 			逆转消息
 		</button>
-				<p class="split_line">v-on:click</p>
-				<input type="text" v-model="message">
+		<p class="split_line">v-on:click</p>
+		<input type="text" v-model="message">
 
-				<p class="split_line">组件</p>		
-				<ul>
-				<todo-item 
-					v-for="item in todoList"
-					v-bind:todo="item"
-					v-bind:key="item.title">
-				</todo-item>
-								
-								</ul>
+		<p class="split_line">组件</p>
+		<ul>
+			<todo-item v-for="item in todoList" v-bind:todo="item" v-bind:key="item.title">
+			</todo-item>
+		</ul>
 	</div>
 	<script>
-
-		Vue.component('todoItem',{
-			props:['todo'],
-			template:'<li>{{todo.title}}</li>'
+		Vue.component('todoItem', {
+			props: ['todo'],
+			template: '<li>{{todo.title}}</li>'
 		})
 
 		var app = new Vue({
 
-			el:"#app",
-			data:{
-				message:"helloword" + new Date(),
-				seen:true,
-				todoList:[{title:"睡午觉1",desc:"睡觉有利于身心健康"},{title:"睡午觉2",desc:"睡觉有利于身心健康"},{title:"睡午觉3",desc:"睡觉有利于身心健康"},{title:"睡午觉4",desc:"睡觉有利于身心健康"}]
+			el: "#app",
+			data: {
+				message: "helloword" + new Date(),
+				seen: true,
+				todoList: [{
+					title: "睡午觉1",
+					desc: "睡觉有利于身心健康"
+				}, {
+					title: "睡午觉2",
+					desc: "睡觉有利于身心健康"
+				}, {
+					title: "睡午觉3",
+					desc: "睡觉有利于身心健康"
+				}, {
+					title: "睡午觉4",
+					desc: "睡觉有利于身心健康"
+				}]
 			},
-			methods:{
-				reverMessage:function function_name(argument) {
-					this.message=this.message.split('').reverse().join('');
+			methods: {
+				reverMessage: function function_name(argument) {
+					this.message = this.message.split('').reverse().join('');
 				}
 			}
 		});
 	</script>
 </body>
+
 </html>
