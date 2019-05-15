@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js">
+		Vue.config.devtools = true;
+    </script>
+    <link rel="stylesheet" href="css/less1.css">
+<script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+
+</head>
+<body >
+    <div class="box" id="app"> 
+        <div class="card">
+            <div class="title">
+              侦听器
+            </div>
+            <div class="body">
+                <p>
+                        <label for="">ask a yes/no question:</label>
+                        <input type="text" v-model="question">
+                </p>
+      
+                <p>
+                    {{answer}}
+                </p>
+            </div>
+        </div>
+
+    </div>
+</body>
+<script>
+    var app = new Vue({
+        el:"#app",
+        data: {
+            question:"",
+            answer:"I cannot give you a answer untill you ask a question!",
+            isDebounce:false
+        },
+        watch:{
+            question:function(newQuestion,oldQuestion){
+                this.answer="Waiting for you to stop typing ... ...";
+                console.log("进入watch");
+                this.debouncedGetAnswer();
+            }
+        },
+        created:function(){
+            console.log("进入Created");
+           // this.debouncedGetAnswer = _.debounce(this.getAnswer, 500)
+           var that = this;
+           this.debouncedGetAnswer  = function(){
+            console.log("进入debouncedGetAnswer");
+               if(that.isDebounce == false){
+          
+                  that.isDebounce = true;
+                   setTimeout(function(){
+                    that.getAnswer();
+                   },599);
+                }    
+               }                   
+            },
+            methods:{
+    
+            getAnswer:function(){
+                console.log("进入getAnswer");
+                this.isDebounce = false;
+                if(this.question.indexOf('?') == -1){
+                    this.answer = "Question usually contain a question mark.";
+                    return;   
+                }
+                this.answer = "Thinking ... ...";
+                var that = this;
+                axios.get("https://yesno.wtf/api")
+                .then(function(res){
+                    that.answer= _.capitalize(res.data.answer);
+
+                })
+                .catch(function(err){
+                    that.answer = "Could not reach the api:"+err;
+                })
+            }
+        }
+    });
+</script>
+</html>

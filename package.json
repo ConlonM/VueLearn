@@ -1,0 +1,26 @@
+{
+  "name": "helloword",
+  "version": "1.0.0",
+  "description": "These changes will be made to just the README file on your readme-edits branch,\r so now this branch contains content that’s different from \r README.md",
+  "main": "index.js",
+  "dependencies": {
+    "less": "^3.9.0"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-less": "^4.0.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ConlonM/VueLearn.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ConlonM/VueLearn/issues"
+  },
+  "homepage": "https://github.com/ConlonM/VueLearn#readme"
+}

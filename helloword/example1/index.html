@@ -39,6 +39,23 @@
 		<p class="split_line">v-on:click</p>
 		<input type="text" v-model="message">
 
+		<p class="split_line">计算属性</p>
+		<input type="text" v-model="fullName">
+		<br>
+        <label >
+fullName:
+		</label>
+<span >{{fullName}}</span>
+<br>
+<label >
+	firstName:
+			</label>
+	<span >{{firstName}}</span>
+	<br>
+<label >
+	lastName:
+			</label>
+	<span >{{lastName}}</span>
 		<p class="split_line">组件</p>
 		<ul>
 			<todo-item v-for="item in todoList" v-bind:todo="item" v-bind:key="item.title">
@@ -69,11 +86,25 @@
 				}, {
 					title: "睡午觉4",
 					desc: "睡觉有利于身心健康"
-				}]
+				}],
+				firstName:"kangzheng",
+				lastName:"meng"
 			},
 			methods: {
 				reverMessage: function function_name(argument) {
 					this.message = this.message.split('').reverse().join('');
+				}
+			},
+			computed:{
+				fullName:{
+					get:function(){
+						return this.firstName+" "+this.lastName;
+					},
+					set:function(val){
+						var names = val.split(' ');
+						this.firstName = names[0];
+						this.lastName = names[names.length-1];
+					}
 				}
 			}
 		});
