@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Class 与 Style 绑定</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js">
+        Vue.config.devtools = true;
+    </script>
+    <link rel="stylesheet" href="css/common.css">
+    <style> 
+       .warn{
+         color: yellow;
+       }
+
+       .error {
+           color: red;
+       }
+
+       .normal{
+           color:green;
+       }
+
+       
+       
+    </style>
+</head>
+<body>
+        <div class="box" id="app"> 
+                <div class="card">
+                    <div class="title">
+                            对象语法 
+                    </div>
+                    <div class="body">
+                      <p v-bind:class="{warn:status==0,error:status==1,normal:status==2}">
+                          颜色显示状态
+                      </p>
+                      <p>
+                          <button v-on:click="setWarn()">
+                              告警
+                          </button>
+                          <button v-on:click="setError">
+                              报错
+                          </button>
+                          <button v-on:click="setNormal()">
+                              正常
+                          </button>
+                      </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="title">
+                       数组语法
+                    </div>
+                    <div class="body">
+                          
+                    </div>
+                </div>
+            </div>
+            <script>    
+            var app = new Vue({
+                el:"#app",
+                data:{
+                    status:0
+                },
+                methods:{
+                    setError:function(){
+                        this.status = 1;
+                    },
+                    setWarn:function(){
+                        this.status = 0;
+                    },
+                    setNormal:function(){
+                        this.status = 2;
+                    }
+                }
+            });
+            </script>
+</body>
+</html>
