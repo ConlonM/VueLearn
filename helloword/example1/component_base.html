@@ -22,10 +22,55 @@
                     </button-counter>
             </div>
         </div>
+        <div class="card">
+            <div class="title">
+                监听子组件事件
+            </div>
+            <div class="body"  :style="{ fontSize: fontSize + 'px' }"> 
+               <blog-post v-for="post in posts" v-bind:post="post" v-on:set-font-size="setFontsize">
+
+               </blog-post>
+            </div>
+        </div>
+        <div class="card">
+            <div class="title">
+                在组件上使用 v-model
+            </div>
+            <div class="body">
+                <p>父级的值：{{userName}}</p>
+                <custom-iput v-model="userName">  
+
+                </custom-iput>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="title">
+                    通过插槽分发内容
+            </div>
+            <div class="body">
+                 <alert-box>
+                     一些事情发生错误了！！SW
+                 </alert-box>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="title">
+                自己实验的表单数据
+            </div>
+            <div class="body">
+                <custom-iput2 v-for="post in posts" v-model="post.title">
+
+                </custom-iput2>
+            </div>
+        </div>
+
     </div>
     
     <script>
-                Vue.component('button-counter',{
+         //组件基础示例
+         Vue.component('button-counter',{
             data:function(){
                 return {
                     count:0
@@ -33,8 +78,43 @@
             },
             template:'<button v-on:click="count++">点击按键{{count+1}}</button>'
         })
+        //监听子组件事件
+        Vue.component("blog-post",{
+            props:['post'],
+            template:'<div class="blog-post"><h1>{{post.title}}</h1><button v-on:click="$emit(\'set-font-size\',18)">设置字号</button><div v-html="post.content"></div> </div>'
+        });
+        //在组件上使用  v-model
+        Vue.component("custom-iput",{
+            props:["value"],
+            template:'<div><label>姓名：</label><input v-bind:value="value" v-on:input="$emit(\'input\',$event.target.value)"></input><p>子组件值：{{value}}</p></div>'
+        })
+         //通过插槽分发内容
+        Vue.component("alert-box",{
+            props:[],
+            template:"<div><strong>Error</strong><slot></slot></div>"
+        })
+            //在组件上使用  v-model
+            Vue.component("custom-iput2",{
+            props:["value"],
+            template:'<div><label>标题：</label><input v-bind:value="value" v-on:input="$emit(\'input\',$event.target.value)"></input><p>子组件值：{{value}}</p></div>'
+        })
+
+     
+
         var app = new Vue({
-            el:"#app"
+            el:"#app",
+           data:{
+            posts:[{title:"雅迪电车疑似倒闭？",content:""},{title:"雅迪电车总经理被情人举报？",content:""}],
+            fontSize:21,
+            userName:"无名氏"
+           },
+           methods:{
+               //传入子组件的事件值
+               setFontsize:function(e){
+                    this.fontSize = e;
+                    console.log("进入setFontsize:"+e);
+               }
+           }
         });
 
     </script>
