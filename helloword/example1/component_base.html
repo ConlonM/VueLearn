@@ -107,8 +107,27 @@
                     </prop-verify>
                 </div>
             </div>
+        <div class="card">
+            <div class="title">
+                进行特性继承
+            </div>
+            <div class="body">
+                    <inherit-attrs 
+                    v-model="userName"
+                    placeholder="请输入文字"
+                    label="姓名："
+                    ss="sss"
+                    class="xxx"
+                    type="text"
+                    readonly
+                    >
+
+                    </inherit-attrs>
+            </div>
+        </div>
     </div>
-    
+
+
     <script>
          //组件基础示例
          Vue.component('button-counter',{
@@ -223,6 +242,23 @@
                 </div>           
             `
         });
+       Vue.component("inheritAttrs",{
+            inheritAttrs:true,
+            props:['label','value'],
+            template:`    
+                    <label >
+                        {{label}}
+                        <input type="text" 
+                           
+                            v-bind:value="value"
+                            v-on:input="$emit('input',$event.target.value)"
+                        >
+                        <p>
+                          $attrs的值：{{$attrs}}
+                       </p>
+                    </label>
+                    `
+       });
         var app = new Vue({
             el:"#app",
            data:{
@@ -241,7 +277,7 @@
                             name:"龙芯"
                 },*/
                 
-                propF:-1
+                propF:1
             },
             propValue:100
            },
