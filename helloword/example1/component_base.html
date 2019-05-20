@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>组件基础</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js">
+<!--     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js">
+		Vue.config.devtools = true;
+    </script> -->
+    <script src="./vue-2.6.10.js">
 		Vue.config.devtools = true;
     </script>
     <link rel="stylesheet" href="css/common.css">
@@ -66,6 +69,44 @@
             </div>
         </div>
 
+        <div class="card">
+            <div class="title">
+                单项数据流
+            </div>
+            <div class="body">
+                <input type="text" v-model="propDate">
+                <data-convert v-bind:date="propDate">
+
+                </data-convert>
+            </div>
+        </div>
+        <div class="card">
+            <div class="title">
+                prop验证--一一绑定
+            </div>
+            <div class="body">
+                <input type="text" v-model.number="propValue">
+                <prop-verify  
+                v-bind:prop-a="props.propA"
+                v-bind:prop-b="props.propB"
+                v-bind:prop-c="props.propC"
+                v-bind:prop-d="props.propD"
+                v-bind:prop-e="props.propE"
+                v-bind:prop-f="propValue">
+
+                </prop-verify>
+            </div>
+        </div>
+        <div class="card">
+                <div class="title">
+                    prop验证--对象绑定
+                </div>
+                <div class="body">
+                    <prop-verify v-bind="props">
+    
+                    </prop-verify>
+                </div>
+            </div>
     </div>
     
     <script>
@@ -99,14 +140,110 @@
             template:'<div><label>标题：</label><input v-bind:value="value" v-on:input="$emit(\'input\',$event.target.value)"></input><p>子组件值：{{value}}</p></div>'
         })
 
-     
-
+        Vue.component("dataConvert",{
+            props:[
+                "date"
+            ],
+            template:`
+                    <div>
+                        <p>
+                            <span>prop值={{date}}</span>
+                        </p>
+                        <p>
+                            <span>{{dateShow}}</span>
+                        </p>
+                        <p>
+                            <span>{{dateComputed}}</span>
+                        </p>
+                        
+                    </div>`,
+            data:function(){
+                return {
+                    dateShow:"组件data初始化="+this.date
+                }
+            },
+            computed:{
+                dateComputed:function(){
+                    return "组件计算属性="+this.date;
+                }
+            }
+        });
+        Vue.component("propVerify",{
+            props:{
+                propA:Number,
+                propB:[String,Number],
+                //必填项
+                propC:{
+                    type:String,
+                    required:true
+                },
+                //带有默认值string
+                propD:{
+                    type:Number,
+                    default:100
+                },
+                //带有默认值的对象
+                propE:{
+                    type:Object,
+                    default:function(){
+                        return {
+                            id:"01",
+                            name:"嚣张"
+                        };
+                    }
+                },
+                //自定义验证函数
+                propF:{
+                    type:Number,
+                    validator:function(value){
+                        return value>0;
+                    }
+                }
+            },
+            template:`
+                    <div>
+                    <p>
+                    Numeber类型： {{propA}}
+                    </p>
+                    <p>
+                        多类型：{{propB}}
+                    </p>
+                    <p>
+                            required的string:{{propC}}
+                    </p>
+                    <p>
+                        默认值的Number：{{propD}}
+                    </p>
+                    <p>
+                        带有默认值的对象:{{propE}}
+                    </p>
+                    <p>
+                        自定义校验方法：{{propF}}
+                    </p>
+                </div>           
+            `
+        });
         var app = new Vue({
             el:"#app",
            data:{
             posts:[{title:"雅迪电车疑似倒闭？",content:""},{title:"雅迪电车总经理被情人举报？",content:""}],
             fontSize:21,
-            userName:"无名氏"
+            userName:"无名氏",
+            propDate:"2019-05-03",
+            props:{
+                propA:100,
+                propB:"多类型",                
+                propC:"",
+                propD:101,
+
+               /* propE:{
+                            id:"02",
+                            name:"龙芯"
+                },*/
+                
+                propF:-1
+            },
+            propValue:100
            },
            methods:{
                //传入子组件的事件值
