@@ -125,10 +125,42 @@
                     </inherit-attrs>
             </div>
         </div>
+        <div class="card">
+                <div class="title">
+                    深入组件-自定义事件
+                </div>
+                <div class="body">
+                    <p>
+                            <label for="">是否选中</label>
+                            <base-checkbox
+                                v-model='ischecked'
+                            >
+                            </base-checkbox>
+                    </p>
+                    <p>
+                        <label for="">ischecked=</label><input type="checkbox" name="" id="" v-model="ischecked">
+                    </p>      
+                </div>
+        </div>
+        <div class="card">
+            <div class="title">
+                将原生事件绑定到组件
+            </div>
+            <div class="body">
+                <native-input-event v-on:click="nativeOnfocus">
+
+                </native-input-event>
+            </div>
+
+
+        </div>
     </div>
 
 
+
+
     <script>
+
          //组件基础示例
          Vue.component('button-counter',{
             data:function(){
@@ -158,7 +190,7 @@
             props:["value"],
             template:'<div><label>标题：</label><input v-bind:value="value" v-on:input="$emit(\'input\',$event.target.value)"></input><p>子组件值：{{value}}</p></div>'
         })
-
+        //组件数据初始化
         Vue.component("dataConvert",{
             props:[
                 "date"
@@ -259,6 +291,57 @@
                     </label>
                     `
        });
+       Vue.component("base-checkbox",{
+           model:{
+               prop:'checkedCustom',
+               event:'change'
+           },
+           props:{
+               checkedCustom:Boolean
+           },
+           template:`
+           <input type="checkbox"
+           v-bind:checked="checkedCustom"
+           v-on:change="$emit('change',$event.target.checked)"           
+           >           
+           `
+        });
+        Vue.component("native-input-event",{
+            inheritAttrs:false,
+            props:["label","value"],
+            data:function(){
+                 return {
+                     nativeName:0
+                 }
+            },
+            computed:  {
+                inputListeners:function(){
+                    var that = this;
+                    return Object.assign({},
+                    this.$listeners,
+                    {
+                        input:function(event){
+                            that.$emit("input",event.target.value);
+                        },
+                        click:function(event){
+                            that.nativeName+=1;
+                        }
+                    })
+                }
+            },
+            template:`    
+                    <label for="">
+                        {{label}}
+                        <input type="text" 
+                            v-bind="$attrs"
+                            v-bind:value="value"
+                            v-on="inputListeners"
+                        >
+                        <p>inputListeners的值={{$listeners}}</p>
+                        <p>inputListeners的值={{nativeName}}</p>
+                    </label>`
+        });
+        
         var app = new Vue({
             el:"#app",
            data:{
@@ -279,13 +362,19 @@
                 
                 propF:1
             },
-            propValue:100
+            propValue:100,
+            ischecked:true
            },
            methods:{
                //传入子组件的事件值
                setFontsize:function(e){
                     this.fontSize = e;
                     console.log("进入setFontsize:"+e);
+               },
+               nativeOnfocus:function(e)
+               {
+                   this.userName+="1";  
+                   console.log("进入nativeOnfocus:"+e);
                }
            }
         });
