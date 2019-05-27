@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>可复用性&组合</title>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js">
+		Vue.config.devtools = true;
+    </script>
+        <link rel="stylesheet" href="css/common.css">
+</head>
+<body>
+    <div id="app">
+      <div class="card">
+          <div class="title">
+            自定义指令focus
+          </div>
+          <div class="body">
+              <input type="text" name="" id="">
+            <input type="text" v-focus>
+
+          </div>
+      </div>
+      <div class="card">
+          <div class="title">
+              钩子函数参数
+          </div>
+          <div class="body">
+              <div v-demo-dir:foo.a.b="message">
+
+              </div>
+          </div>
+      </div>
+      <div class="card">
+        <div class="title">
+            钩子动态参数
+        </div>
+        <div class="body">
+            <p v-tack:left="[dynamicleft]">
+                嘎嘎嘎
+            </p>
+        </div>
+      </div>
+      <div class="card">
+          <div class="title">
+              渲染函数
+          </div>
+          <div class="body">
+              <anchored-heading :level="3">中华人民共和国H</anchored-heading>
+          </div>
+      </div>
+    </div>
+
+</body>
+<script>
+//定义一个混入对象
+var myMixin = {
+    created:function(){
+     this.hello();
+    },
+    methods:{
+        hello:function(){
+        console.log("hello for mixin·");
+        },
+        conficFun:function(){
+            console.log("mixs func")
+        }
+    }
+};
+
+//定义一个使用混入对象的组件
+var comMixin = Vue.extend({
+    mixins:[myMixin],
+    methods:{
+        hello2:function(){
+            console.log("组件");
+        },
+        conficFun:function(){
+            console.log("com func")
+        }
+    }
+})
+
+var com_mix = new comMixin();
+com_mix.hello2();
+com_mix.hello();
+com_mix.conficFun();
+
+Vue.directive("focus",{
+    inserted:function(el){
+        el.focus();
+    }
+});
+
+Vue.directive("demo-dir",{
+    bind:function(el,binding,vnode,oldVnode){
+        var s =JSON.stringify;
+       el.innerHTML=
+       'name:'+binding.name+'<br>'+
+       'value:'+binding.value+'<br>'+
+       'expression:'+binding.expression+'<br>'+
+       'argument:'+binding.arg+'<br>'+
+       'modifiers:'+s(binding.modifiers)+'<br>'+
+       'vnode keys:'+Object.keys(vnode)+'<br>'    
+       
+    }
+
+});
+
+
+Vue.directive("tack",{
+bind:function(el,binding,vnode){
+   // el.style.position='fixed';
+    var s = (binding.arg == 'left'? 'left': 'top')
+el.style[s]=binding.value+'px';
+
+var s =JSON.stringify;
+       el.innerHTML+=
+       'name:'+binding.name+'<br>'+
+       'value:'+binding.value+'<br>'+
+       'expression:'+binding.expression+'<br>'+
+       'argument:'+binding.arg+'<br>'+
+       'modifiers:'+s(binding.modifiers)+'<br>'+
+       'vnode keys:'+Object.keys(vnode)+'<br>'    
+}
+});
+
+Vue.component("anchored-heading",{
+ // template:'#anchored-heading-template',
+  props:{
+      level:{
+          type:Number,
+          required:true
+      }
+  },
+  render:function(createElement){
+      return createElement(
+          'h'+this.level,
+          this.$slots.default
+      )
+  }
+});
+
+var app = new Vue({
+            "el":"#app", 
+            created:function(){
+                console.log("app的created钩子被调用");
+            },
+            data:{
+                message:"我是一个指令",
+                dynamicleft:500
+            }   
+        });
+
+
+</script>
+</html>

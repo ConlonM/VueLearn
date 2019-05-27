@@ -154,6 +154,51 @@
 
 
         </div>
+        <div class="card">
+            <div class="title">
+                具名插槽
+            </div>
+            <div class="body">
+                <slot-name-com>
+                    <template v-slot:header>
+                        我是Header插槽的
+                    </template>
+                   
+                        我是main插槽的
+   
+
+                    <template v-slot:footer>
+                        我是Footer插槽的
+                    </template>
+                </slot-name-com>
+            </div>
+        </div>
+        <div class="card">
+            <div class="title">
+                插槽作用域
+            </div>
+            <div class="body">
+               <slot-scope>
+                    <template v-slot:slot-a="">
+                            {{currentUser.name}}
+
+                        </template>
+               </slot-scope>   
+              
+            </div>
+        </div>
+        <div class="card">
+            <div class="title">
+                动态插槽
+            </div>
+            <div class="body">
+                <slot-scope>
+                    <template v-slot:[dynamicSlot]="currentUser">
+                        {{currentUser}}
+                    </template>
+                </slot-scope>
+            </div>
+        </div>
     </div>
 
 
@@ -341,7 +386,64 @@
                         <p>inputListeners的值={{nativeName}}</p>
                     </label>`
         });
+        //修饰符。sync的例子
+        Vue.component("text-document",{
+            
+        });
+
+        //具名插槽的例子
+        Vue.component("slot-name-com",{
+            template:`     
+    <div class="container">
+         <div class="header">
+            <slot name="header"></slot>
+         </div>
+         <div class="main">
+            <slot></slot>
+         </div>
+         <div class="footer">
+            <slot name="footer">
+                
+            </slot>
+         </div>
+     </div>`
         
+        });
+        
+        Vue.component("slot-scope",{
+            data:function(){
+               return {
+                currentUser:{
+                    name:"张三丰",
+                    info:"家住黄河边，手握荒芜山，拳打南少林，脚踢武当山。"
+                }
+               }
+            },
+            template:`    <div>
+
+<div>
+   <span>
+                我是插槽A:
+    </span>
+            <br>
+    <slot name="slot-a" v-bind="currentUser">
+{{currentUser.name}}
+    </slot>
+</div>
+
+<div>
+        <span>
+                     我是插槽B:
+         </span>
+                 <br>
+         <slot name="slot-b">
+                {{currentUser.info}}
+         </slot>
+     </div>
+</div>`
+        });
+
+
         var app = new Vue({
             el:"#app",
            data:{
@@ -363,7 +465,12 @@
                 propF:1
             },
             propValue:100,
-            ischecked:true
+            ischecked:true,
+            currentUser:{
+                name:'解构插槽',
+                info:'结构查操操操哦擦'
+            },
+            dynamicSlot:"slot-a"
            },
            methods:{
                //传入子组件的事件值
